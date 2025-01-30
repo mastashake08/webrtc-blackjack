@@ -77,10 +77,16 @@
   
   const store = useGameStore();
   const joinId = ref("");
-  
+  console.log(store)
   const initializePeer = () => store.initializePeer();
   const connectToHost = () => store.connectToPeer(joinId.value);
-  const dealCards = () => store.dealCards();
+  const dealCards = () => {
+  if (store.isHost) {
+    store.dealCards();
+  } else if (store.conn) {
+    store.conn.send({ type: "dealCards" });
+  }
+};
   const hit = () => {
     if (store.isHost) {
       store.dealCardToPlayer(store.peerId);
