@@ -1,13 +1,13 @@
 <template>
     <div class="card-container" :class="{ 'flip-card': hiddenCard }">
       <div class="card animate-deal" :class="{ 'hidden-card': hiddenCard }">
-        <span class="card-text">{{ card.value }}</span>
-        <span class="card-suit">{{ card.suit }}</span>
+        <span class="card-text">{{ card?.value }}</span>
+        <span class="card-suit">{{ card?.suit }}</span>
       </div>
     </div>
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   defineProps({
     card: Object,
     hiddenCard: Boolean,

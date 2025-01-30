@@ -5,8 +5,9 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-  "noImplicitAny": true,
- 
-  },
-  "allowJs": true,
+    "types": ["vue"],
+    "noImplicitAny": true,
+    "allowJs": true,
+    "strict": false,
+  }
 }

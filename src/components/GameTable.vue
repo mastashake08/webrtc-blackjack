@@ -70,8 +70,9 @@
     </div>
   </template>
   
-  <script setup>
+  <script setup lang="ts">
   import { ref, computed } from "vue";
+  // @ts-ignore
   import { useGameStore } from "../store/gameStore";
   import Card from "./Card.vue";
   
@@ -113,7 +114,7 @@
   
   const winnerMessage = computed(() => {
     let dealerScore = store.dealer.score;
-    let messages = [];
+    let messages: any = [];
   
     Object.keys(store.players).forEach((playerId) => {
       const player = store.players[playerId];
