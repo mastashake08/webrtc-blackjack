@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Peer } from "peerjs";
-
+import { SoundManager } from "../utils/SoundManager";
 export const useGameStore = defineStore("game", {
   state: () => ({
     peer: null,
@@ -165,6 +165,7 @@ export const useGameStore = defineStore("game", {
           player.balance -= player.bet;
         } else if (dealerScore > 21 || player.score > dealerScore) {
           player.balance += player.bet;
+          SoundManager.playSound("win");
         } else if (player.score < dealerScore) {
           player.balance -= player.bet;
         }
