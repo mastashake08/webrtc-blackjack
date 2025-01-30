@@ -1,50 +1,70 @@
 <template>
-    <div class="game-table">
-      <h2>Multiplayer Blackjack ♠♥♣♦</h2>
+    <div class="min-h-screen bg-gradient-to-br from-green-900 to-green-700 text-white flex flex-col items-center py-10">
+      <h1 class="text-4xl font-bold mb-6">♠♥ Let The Games Begin ♣♦</h1>
   
-      <!-- Show this if the player hasn't started or joined -->
-      <div v-if="!store.peerId">
-        <button @click="initializePeer">Start Game (Host)</button>
+      <!-- Home Screen -->
+      <div v-if="!store.peerId" class="flex flex-col items-center space-y-4">
+        <button @click="initializePeer"
+          class="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition rounded-md font-semibold text-lg shadow-md">
+          Start Game (Host)
+        </button>
       </div>
   
-      <div v-else-if="!store.conn">
-        <p>Your Peer ID: <strong>{{ store.peerId }}</strong></p>
-        <input v-model="joinId" placeholder="Enter Host ID">
-        <button @click="connectToHost">Join Game</button>
+      <div v-else-if="!store.conn" class="flex flex-col items-center space-y-4">
+        <p class="text-lg font-semibold">Your Peer ID: <span class="text-yellow-300">{{ store.peerId }}</span></p>
+        <input v-model="joinId" placeholder="Enter Host ID"
+          class="p-2 text-black rounded-md border border-gray-300 w-64 text-center" />
+        <button @click="connectToHost"
+          class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 transition rounded-md font-semibold text-lg shadow-md">
+          Join Game
+        </button>
       </div>
   
       <!-- Game UI -->
-      <div v-if="store.conn || store.isHost">
-        <div v-if="store.isHost">
-          <button @click="dealCards">Start Game (Deal Cards)</button>
+      <div v-if="store.conn || store.isHost" class="w-full max-w-3xl mt-6">
+        <!-- Start Game Button -->
+        <div v-if="store.isHost" class="mb-6">
+          <button @click="dealCards"
+            class="px-6 py-3 bg-red-600 hover:bg-red-700 transition rounded-md font-semibold text-lg shadow-md">
+            Start Game (Deal Cards)
+          </button>
         </div>
   
-        <h3>Dealer</h3>
-        <div class="hand">
+        <!-- Dealer Section -->
+        <h3 class="text-2xl font-bold mt-6">Dealer</h3>
+        <div class="flex justify-center mt-2 space-x-2">
           <Card v-for="(card, index) in store.dealer.hand" 
                 :key="card.value + card.suit"
                 :card="card"
                 :hiddenCard="index === 1 && !store.gameOver" />
         </div>
   
-        <div v-for="(player, id) in store.players" :key="id">
-          <h3>Player {{ id }} - Score: {{ player.score }}</h3>
-          <div class="hand">
+        <!-- Players Section -->
+        <div v-for="(player, id) in store.players" :key="id" class="mt-6 text-center">
+          <h3 class="text-lg font-semibold">Player {{ id }} - Score: {{ player.score }}</h3>
+          <div class="flex justify-center space-x-2">
             <Card v-for="card in player.hand" :key="card.value + card.suit" :card="card"/>
           </div>
         </div>
   
-        <div v-if="store.currentTurn === store.peerId">
-            <button @click="hit">Hit</button>
-            <button @click="stand">Stand</button>
+        <!-- Player Controls -->
+        <div v-if="store.currentTurn === store.peerId" class="mt-6 flex space-x-4 justify-center">
+          <button @click="hit" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 transition rounded-md font-semibold text-lg shadow-md">
+            Hit
+          </button>
+          <button @click="stand" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 transition rounded-md font-semibold text-lg shadow-md">
+            Stand
+          </button>
         </div>
-
   
-        <div v-if="store.gameOver">
-          <h2>Game Over!</h2>
-          <p>{{ winnerMessage }}</p>
-          <button @click="restartGame">Play Again</button>
-
+        <!-- Game Over Section -->
+        <div v-if="store.gameOver" class="mt-8 text-center">
+          <h2 class="text-3xl font-bold">Game Over!</h2>
+          <p class="text-xl">{{ winnerMessage }}</p>
+          <button @click="restartGame"
+            class="px-6 py-3 bg-green-600 hover:bg-green-700 transition rounded-md font-semibold text-lg shadow-md mt-4">
+            Play Again
+          </button>
         </div>
       </div>
     </div>
@@ -63,26 +83,27 @@
   const dealCards = () => store.dealCards();
   const hit = () => {
     if (store.isHost) {
-        store.dealCardToPlayer(store.peerId);
+      store.dealCardToPlayer(store.peerId);
     } else if (store.conn) {
-        store.conn.send({ type: "hit", id: store.peerId });
+      store.conn.send({ type: "hit", id: store.peerId });
     }
-    };
-
-    const stand = () => {
+  };
+  
+  const stand = () => {
     if (store.isHost) {
-        store.nextTurn();
+      store.nextTurn();
     } else if (store.conn) {
-        store.conn.send({ type: "stand", id: store.peerId });
+      store.conn.send({ type: "stand", id: store.peerId });
     }
-    };
-    const restartGame = () => {
+  };
+  
+  const restartGame = () => {
     if (store.isHost) {
-        store.restartGame();
+      store.restartGame();
     } else if (store.conn) {
-        store.conn.send({ type: "restart" });
+      store.conn.send({ type: "restart" });
     }
-    };
+  };
   
   const winnerMessage = computed(() => {
     let dealerScore = store.dealer.score;
@@ -104,17 +125,4 @@
     return messages.join("\n");
   });
   </script>
-  
-  <style scoped>
-  .game-table {
-    text-align: center;
-    margin: 20px;
-  }
-  
-  .hand {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  </style>
   
