@@ -23,7 +23,7 @@
       <!-- Game UI -->
       <div v-if="store.conn || store.isHost" class="w-full max-w-3xl mt-6">
         <!-- Start Game Button -->
-        <div v-if="store.isHost" class="mb-6">
+        <div v-if="store.isHost" class="mb-6 text-center">
           <button @click="dealCards"
             class="px-6 py-3 bg-red-600 hover:bg-red-700 transition rounded-md font-semibold text-lg shadow-md">
             Start Game (Deal Cards)
@@ -31,7 +31,7 @@
         </div>
   
         <!-- Dealer Section -->
-        <h3 class="text-2xl font-bold mt-6">Dealer</h3>
+        <h3 class="text-2xl font-bold mt-6 text-center">Dealer</h3>
         <div class="flex justify-center mt-2 space-x-2">
           <Card v-for="(card, index) in store.dealer.hand" 
                 :key="card.value + card.suit"
