@@ -16,6 +16,7 @@
   
   <script setup lang="ts">
   import { reactive } from "vue";
+// @ts-ignore
   import { SoundManager } from "../utils/SoundManager";
     import { onMounted } from "vue";
   onMounted(() => {
