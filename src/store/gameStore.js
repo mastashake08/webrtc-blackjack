@@ -121,6 +121,7 @@ export const useGameStore = defineStore("game", {
 
     dealCardToPlayer(playerId) {
       if (this.isHost && this.currentTurn === playerId) {
+        SoundManager.play("hit");
         this.players[playerId].hand.push(this.deck.pop());
         this.players[playerId].score = this.calculateScore(this.players[playerId].hand);
 
@@ -163,11 +164,13 @@ export const useGameStore = defineStore("game", {
         const player = this.players[playerId];
         if (player.score > 21) {
           player.balance -= player.bet;
+          SoundManager.play("lose");
         } else if (dealerScore > 21 || player.score > dealerScore) {
           player.balance += player.bet;
-          SoundManager.playSound("win");
+          SoundManager.play("win");
         } else if (player.score < dealerScore) {
           player.balance -= player.bet;
+          SoundManager.play("lose");
         }
         player.bet = 0;
       });
@@ -194,6 +197,8 @@ export const useGameStore = defineStore("game", {
     },
 
     shuffleDeck() {
+      SoundManager.play("shuffle");
+      console.log('Shuffle')
       const suits = ["♠", "♥", "♦", "♣"];
       const values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
       let deck = suits.flatMap((suit) =>
