@@ -6,7 +6,7 @@
   ],
   "compilerOptions": {
     "types": ["vue"],
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "allowJs": true,
     "strict": false,
   }
