@@ -12,5 +12,5 @@
     "moduleResolution": "node",
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.tsx","src/**/*.js", "src/**/*.vue"]
 }
