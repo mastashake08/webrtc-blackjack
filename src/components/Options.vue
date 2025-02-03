@@ -35,5 +35,7 @@
     SoundManager.toggleSoundEffects();
     store.soundEnabled = SoundManager.soundEnabled;
   };
+
+ 
   </script>
   

@@ -55,6 +55,9 @@
           <button @click="stand" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 transition rounded-md font-semibold text-lg shadow-md">
             Stand
           </button>
+          <button @click="callPeer" class="px-6 py-3 bg-purple-500 hover:bg-purple-600 transition rounded-md font-semibold text-lg shadow-md">
+            Call
+          </button>
         </div>
   
         <!-- Game Over Section -->
@@ -78,7 +81,7 @@
   
   const store = useGameStore();
   const joinId = ref("");
-  console.log(store)
+
   const initializePeer = () => store.initializePeer();
   const connectToHost = () => store.connectToPeer(joinId.value);
   const dealCards = () => {
@@ -88,6 +91,8 @@
     store.conn.send({ type: "dealCards" });
   }
 };
+
+  const callPeer = () => store.callPeer(joinId.value);
   const hit = () => {
     if (store.isHost) {
       store.dealCardToPlayer(store.peerId);

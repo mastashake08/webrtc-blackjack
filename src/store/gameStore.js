@@ -12,9 +12,26 @@ export const useGameStore = defineStore("game", {
     isHost: false,
     currentTurn: null,
     gameOver: false,
+    mediaStream: null,
   }),
 
   actions: {
+    enableMicrophone() {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          this.mediaStream = stream;
+        })
+        .catch((error) => {
+          console.error("Error accessing microphone:", error);
+        });
+    },
+    callPeer(peerId) {
+      if(!this.mediaStream) { 
+        this.enableMicrophone();
+      }
+      this.peer.call(peerId, this.mediaStream);
+    },
     initializePeer(customPeerId = null) {
       this.peerId = customPeerId || this.generateRandomId();
       this.peer = new Peer(this.peerId);
@@ -26,6 +43,19 @@ export const useGameStore = defineStore("game", {
       this.peer.on("connection", (connection) => {
         this.isHost = true;
         this.handleNewConnection(connection);
+      });
+      this.peer.on("call", (call) => {
+        console.log("Incoming call from:", call);
+        if(!this.mediaStream) { 
+          this.enableMicrophone();
+        }
+        call.answer(this.mediaStream);
+        call.on("stream", (remoteStream) => {
+          console.log("Received remote stream", remoteStream);
+          const audio = new Audio()
+          audio.srcObject = remoteStream;
+          audio.play();
+        });
       });
     },
     dealCards() {
