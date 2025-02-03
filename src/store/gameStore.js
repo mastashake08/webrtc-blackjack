@@ -18,7 +18,7 @@ export const useGameStore = defineStore("game", {
   actions: {
     enableMicrophone() {
       navigator.mediaDevices
-        .getUserMedia({ audio: true })
+        .getUserMedia({ audio: true, video: true })
         .then((stream) => {
           this.mediaStream = stream;
         })
@@ -46,15 +46,28 @@ export const useGameStore = defineStore("game", {
       });
       this.peer.on("call", (call) => {
         console.log("Incoming call from:", call);
-        if(!this.mediaStream) { 
+        if(this.mediaStream == null) { 
           this.enableMicrophone();
+          call.answer(this.mediaStream);
+        } else {
+          call.answer(this.mediaStream);
         }
-        call.answer(this.mediaStream);
+        
         call.on("stream", (remoteStream) => {
           console.log("Received remote stream", remoteStream);
-          const audio = new Audio()
-          audio.srcObject = remoteStream;
-          audio.play();
+          const video = document.createElement('video');
+          video.srcObject = remoteStream;
+          video.onloadedmetadata = () => {
+            video.play();
+          const pipButton = document.createElement('button'); 
+          pipButton.innerText = 'Enter Picture-in-Picture';
+          pipButton.onclick = () => {
+            video.requestPictureInPicture();
+          }
+          document.body.appendChild(video);
+          document.body.appendChild(pipButton);
+          }
+     
         });
       });
     },
