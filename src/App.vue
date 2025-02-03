@@ -8,7 +8,7 @@
     <!-- Game Table -->
     <div class="w-full max-w-5xl bg-green-800/90 border-4 border-yellow-500 rounded-lg shadow-2xl p-6 sm:p-10 animate-slide-up">
       <GameTable />
-      <Options draggable=true/> <!-- 🔥 Add the settings component -->
+      <Options draggable=true></Options> <!-- 🔥 Add the settings component -->
     </div>
   </div>
 </template>
